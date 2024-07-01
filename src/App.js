@@ -3,8 +3,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './App.css';
 import { Chart, registerables } from 'chart.js';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from './firebaseConfig';
+import { ref, get, child } from 'firebase/database';
+import { database } from './firebaseConfig';
+
 Chart.register(...registerables);
 
 function App() {
@@ -17,15 +18,13 @@ function App() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const querySnapshot = await getDocs(collection(db, "incomedata"));
-      const incomeData = [];
-      querySnapshot.forEach((doc) => {
-        incomeData.push(doc.data());
-      });
-      if (incomeData.length > 0) {
-        setOverallIncomeData(incomeData[0].overallIncome);
-        setBarChartData(incomeData[0].barChart);
-        setLineChartData(incomeData[0].lineChart);
+      const dbRef = ref(database);
+      const snapshot = await get(child(dbRef, 'incomedata/documentId'));
+      if (snapshot.exists()) {
+        const incomeData = snapshot.val();
+        setOverallIncomeData(Object.values(incomeData.overallIncome || {}));
+        setBarChartData(Object.values(incomeData.barChart || {}));
+        setLineChartData(Object.values(incomeData.lineChart || {}));
       }
     };
 

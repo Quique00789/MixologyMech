@@ -1,10 +1,9 @@
-// src/App.js
-
 import React, { useEffect, useRef, useState } from 'react';
 import './App.css';
 import { Chart, registerables } from 'chart.js';
-import { ref, get, child } from 'firebase/database';
+import { ref, get, child, update } from 'firebase/database';
 import { database } from './firebaseConfig';
+import UpdateFirebase from './components/UpdateFirebase';  
 
 Chart.register(...registerables);
 
@@ -15,16 +14,17 @@ function App() {
   const [overallIncomeData, setOverallIncomeData] = useState([]);
   const [barChartData, setBarChartData] = useState([]);
   const [lineChartData, setLineChartData] = useState([]);
+  const [expandedChart, setExpandedChart] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       const dbRef = ref(database);
-      const snapshot = await get(child(dbRef, 'incomedata/documentId'));
+      const snapshot = await get(child(dbRef, 'machineData/documentId'));
       if (snapshot.exists()) {
-        const incomeData = snapshot.val();
-        setOverallIncomeData(Object.values(incomeData.overallIncome || {}));
-        setBarChartData(Object.values(incomeData.barChart || {}));
-        setLineChartData(Object.values(incomeData.lineChart || {}));
+        const machineData = snapshot.val();
+        setOverallIncomeData(Object.values(machineData.drinkConsumption || {}).map(item => item.consumption));
+        setBarChartData(Object.values(machineData.barChart || {}));
+        setLineChartData(Object.values(machineData.lineChart || {}));
       }
     };
 
@@ -46,9 +46,9 @@ function App() {
     if (overallIncomeData.length) {
       const overallIncomeCtx = document.getElementById('overallIncomeChart').getContext('2d');
       createChart(overallIncomeCtx, 'line', {
-        labels: ['May', 'June', 'July', 'August', 'September'],
+        labels: overallIncomeData.map((_, index) => `Drink ${index + 1}`),
         datasets: [{
-          label: 'Overall Income',
+          label: 'Drink Consumption',
           data: overallIncomeData,
           backgroundColor: 'rgba(255, 99, 132, 0.2)',
           borderColor: 'rgba(255, 99, 132, 1)',
@@ -68,9 +68,9 @@ function App() {
     if (barChartData.length) {
       const barChartCtx = document.getElementById('barChart').getContext('2d');
       createChart(barChartCtx, 'bar', {
-        labels: ['Technology', 'Security', 'Income'],
+        labels: barChartData.map((_, index) => `Bar ${index + 1}`),
         datasets: [{
-          label: 'Overall Income',
+          label: 'Expenditure per Drink',
           data: barChartData,
           backgroundColor: [
             'rgba(75, 192, 192, 0.2)',
@@ -98,9 +98,9 @@ function App() {
     if (lineChartData.length) {
       const lineChartCtx = document.getElementById('lineChart').getContext('2d');
       createChart(lineChartCtx, 'line', {
-        labels: ['May', 'June', 'July'],
+        labels: lineChartData.map((_, index) => `Line ${index + 1}`),
         datasets: [{
-          label: 'Overall Income',
+          label: 'Prepared Drinks',
           data: lineChartData,
           backgroundColor: 'rgba(54, 162, 235, 0.2)',
           borderColor: 'rgba(54, 162, 235, 1)',
@@ -130,30 +130,45 @@ function App() {
     };
   }, [overallIncomeData, barChartData, lineChartData]);
 
+  const toggleExpandChart = (chart) => {
+    setExpandedChart(chart === expandedChart ? null : chart);
+  };
+
+  const closeExpandedChart = () => {
+    setExpandedChart(null);
+  };
+
   return (
     <div className="dashboard">
+      {expandedChart && <div className="overlay" onClick={closeExpandedChart}></div>}
       <div className="top">
         <div className="income">Income<br />534</div>
         <div className="income">Income<br />1,568,800$</div>
         <div className="income">Income<br />1,568,800$</div>
       </div>
       <div className="middle">
-        <div className="chart">
+        <div 
+          className={`chart ${expandedChart === 'overallIncomeChart' ? 'expanded' : ''}`} 
+          onClick={() => toggleExpandChart('overallIncomeChart')}
+        >
           <canvas id="overallIncomeChart"></canvas>
-        </div>
-        <div className="progress">
-          <div className="progress-text">Overall Income<br />54%</div>
-          <div className="progress-circle" id="progressCircle"></div>
         </div>
       </div>
       <div className="bottom">
-        <div className="bar-chart">
+        <div 
+          className={`bar-chart ${expandedChart === 'barChart' ? 'expanded' : ''}`} 
+          onClick={() => toggleExpandChart('barChart')}
+        >
           <canvas id="barChart"></canvas>
         </div>
-        <div className="line-chart">
+        <div 
+          className={`line-chart ${expandedChart === 'lineChart' ? 'expanded' : ''}`} 
+          onClick={() => toggleExpandChart('lineChart')}
+        >
           <canvas id="lineChart"></canvas>
         </div>
       </div>
+      <UpdateFirebase /> {/* Añadir el nuevo componente aquí */}
     </div>
   );
 }

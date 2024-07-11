@@ -11,11 +11,14 @@ body {
   align-items: center;
   gap: 20px;
   padding: 20px;
+  width: 100%;
+  min-height: 100vh;
 }
 
 .top, .middle, .bottom {
   display: flex;
   gap: 20px;
+  width: 100%;
 }
 
 .income {
@@ -23,11 +26,11 @@ body {
   padding: 20px;
   border-radius: 10px;
   text-align: center;
+  flex: 1;
 }
 
 .middle, .bottom {
   justify-content: space-between;
-  width: 100%;
 }
 
 .chart, .bar-chart, .line-chart {
@@ -35,8 +38,11 @@ body {
   padding: 20px;
   border-radius: 10px;
   flex: 1;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
+  width: calc(50% - 10px);
+  box-sizing: border-box;
+  height: 300px;
+  position: relative;
 }
 
 .expanded {
@@ -64,34 +70,16 @@ body {
   z-index: 999;
 }
 
-.update-container {
+.app-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 20px;
   background-color: #2B2B3B;
-  padding: 20px;
-  border-radius: 10px;
-  text-align: center;
-  width: 300px;
-  margin: 20px auto;
-}
-
-.input-group {
-  margin: 10px 0;
-}
-
-.input-group label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.input-group input {
   width: 100%;
-  padding: 8px;
-  border-radius: 5px;
-  border: none;
-  background-color: #1E1E2E;
-  color: white;
+  box-sizing: border-box;
 }
 
-button {
+.auth-btn {
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
@@ -100,15 +88,75 @@ button {
   cursor: pointer;
 }
 
-button:hover {
+.auth-btn:hover {
   background-color: #FF8E53;
 }
 
+.login-message {
+  text-align: center;
+  font-size: 1.2em;
+  margin-top: 50px;
+}
+
+/* Estilos para el popup de autenticación */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup {
+  background-color: #1a1a1a;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.5);
+  max-width: 400px;
+  width: 100%;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  border-bottom: 1px solid #333;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+}
+
+.popup-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.popup-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
 .error-message {
-  color: #FF5E79;
+  color: #ff4b4b;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
 }
-
-.success-message {
-  color: #00FFAB;
-}
-

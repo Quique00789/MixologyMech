@@ -1,3 +1,4 @@
+//AuthPopup.jsx
 import React, { useState } from 'react';
 import { signInWithGoogle } from '../firebaseConfig';
 import '../styles/AuthPopup.css';

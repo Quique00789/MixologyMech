@@ -176,12 +176,7 @@ function App() {
       <Header isAuthenticated={isAuthenticated} onLogout={handleLogout} onLogin={handleLoginClick} />
       {showPopup && <AuthPopup onClose={handleClosePopup} onSuccessfulLogin={handleSuccessfulLogin} />}
       {expandedChart && <div className="overlay" onClick={closeExpandedChart}></div>}
-      <div className="top">
-        <div className="income">Income<br />534</div>
-        <div className="income">Income<br />1,568,800$</div>
-        <div className="income">Income<br />1,568,800$</div>
-      </div>
-      {isAuthenticated && (
+      {isAuthenticated ? (
         <>
           <div className="middle">
             <div 
@@ -193,21 +188,20 @@ function App() {
           </div>
           <div className="bottom">
             <div 
-              className={`bar-chart ${expandedChart === 'barChart' ? 'expanded' : ''}`} 
+              className={`chart ${expandedChart === 'barChart' ? 'expanded' : ''}`} 
               onClick={() => toggleExpandChart('barChart')}
             >
               <canvas id="barChart"></canvas>
             </div>
             <div 
-              className={`line-chart ${expandedChart === 'lineChart' ? 'expanded' : ''}`} 
+              className={`chart ${expandedChart === 'lineChart' ? 'expanded' : ''}`} 
               onClick={() => toggleExpandChart('lineChart')}
             >
               <canvas id="lineChart"></canvas>
             </div>
           </div>
         </>
-      )}
-      {!isAuthenticated && (
+      ) : (
         <div className="login-message">
           Por favor, inicia sesión para ver las gráficas.
         </div>

@@ -1,150 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import './App.css';
-import { Chart, registerables } from 'chart.js';
-import { ref, get, child } from 'firebase/database';
-import { database } from './firebaseConfig';
 import Header from './components/Header';
 import AuthPopup from './components/AuthPopup';
-  
-Chart.register(...registerables);
+import DrinkTop from './components/DrinkTop';
+import BarChart from './components/BarChart';
+import LineChart from './components/ProfitsChart';
 
 function App() {
-  const overallIncomeChartRef = useRef(null);
-  const barChartRef = useRef(null);
-  const lineChartRef = useRef(null);
-  const [overallIncomeData, setOverallIncomeData] = useState([]);
-  const [barChartData, setBarChartData] = useState([]);
-  const [lineChartData, setLineChartData] = useState([]);
-  const [expandedChart, setExpandedChart] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      const fetchData = async () => {
-        const dbRef = ref(database);
-        const snapshot = await get(child(dbRef, 'machineData/documentId'));
-        if (snapshot.exists()) {
-          const machineData = snapshot.val();
-          setOverallIncomeData(Object.values(machineData.drinkConsumption || {}).map(item => item.consumption));
-          setBarChartData(Object.values(machineData.barChart || {}));
-          setLineChartData(Object.values(machineData.lineChart || {}));
-        }
-      };
-
-      fetchData();
-    } else {
-      setOverallIncomeData([]);
-      setBarChartData([]);
-      setLineChartData([]);
-    }
-  }, [isAuthenticated]);
-
-  useEffect(() => {
-    const createChart = (ctx, type, data, options) => {
-      if (ctx.chart) {
-        ctx.chart.destroy();
-      }
-      ctx.chart = new Chart(ctx, {
-        type: type,
-        data: data,
-        options: {
-          ...options,
-          responsive: true,
-          maintainAspectRatio: false,
-        },
-      });
-    };
-  
-    if (isAuthenticated) {
-      if (overallIncomeData.length) {
-        const overallIncomeCtx = document.getElementById('overallIncomeChart').getContext('2d');
-        createChart(overallIncomeCtx, 'line', {
-          labels: overallIncomeData.map((_, index) => `Drink ${index + 1}`),
-          datasets: [{
-            label: 'Drink Consumption',
-            data: overallIncomeData,
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            borderColor: 'rgba(255, 99, 132, 1)',
-            borderWidth: 1
-          }]
-        }, {
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          }
-        });
-        overallIncomeChartRef.current = overallIncomeCtx.chart;
-      }
-
-      if (barChartData.length) {
-        const barChartCtx = document.getElementById('barChart').getContext('2d');
-        createChart(barChartCtx, 'bar', {
-          labels: barChartData.map((_, index) => `Bar ${index + 1}`),
-          datasets: [{
-            label: 'Expenditure per Drink',
-            data: barChartData,
-            backgroundColor: [
-              'rgba(75, 192, 192, 0.2)',
-              'rgba(153, 102, 255, 0.2)',
-              'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-              'rgba(75, 192, 192, 1)',
-              'rgba(153, 102, 255, 1)',
-              'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
-          }]
-        }, {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          }
-        });
-        barChartRef.current = barChartCtx.chart;
-      }
-
-      if (lineChartData.length) {
-        const lineChartCtx = document.getElementById('lineChart').getContext('2d');
-        createChart(lineChartCtx, 'line', {
-          labels: lineChartData.map((_, index) => `Line ${index + 1}`),
-          datasets: [{
-            label: 'Prepared Drinks',
-            data: lineChartData,
-            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 1
-          }]
-        }, {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          }
-        });
-        lineChartRef.current = lineChartCtx.chart;
-      }
-    }
-
-    return () => {
-      if (overallIncomeChartRef.current) {
-        overallIncomeChartRef.current.destroy();
-      }
-      if (barChartRef.current) {
-        barChartRef.current.destroy();
-      }
-      if (lineChartRef.current) {
-        lineChartRef.current.destroy();
-      }
-    };
-  }, [overallIncomeData, barChartData, lineChartData, isAuthenticated]);
+  const [expandedChart, setExpandedChart] = useState(null);
 
   const toggleExpandChart = (chart) => {
     setExpandedChart(chart === expandedChart ? null : chart);
@@ -180,10 +45,10 @@ function App() {
         <>
           <div className="middle">
             <div 
-              className={`chart ${expandedChart === 'overallIncomeChart' ? 'expanded' : ''}`} 
-              onClick={() => toggleExpandChart('overallIncomeChart')}
+              className={`chart ${expandedChart === 'drinkTop' ? 'expanded' : ''}`} 
+              onClick={() => toggleExpandChart('drinkTop')}
             >
-              <canvas id="overallIncomeChart"></canvas>
+              <DrinkTop />
             </div>
           </div>
           <div className="bottom">
@@ -191,13 +56,13 @@ function App() {
               className={`chart ${expandedChart === 'barChart' ? 'expanded' : ''}`} 
               onClick={() => toggleExpandChart('barChart')}
             >
-              <canvas id="barChart"></canvas>
+              <BarChart />
             </div>
             <div 
               className={`chart ${expandedChart === 'lineChart' ? 'expanded' : ''}`} 
               onClick={() => toggleExpandChart('lineChart')}
             >
-              <canvas id="lineChart"></canvas>
+              <LineChart />
             </div>
           </div>
         </>

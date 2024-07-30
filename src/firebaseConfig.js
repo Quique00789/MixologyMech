@@ -23,7 +23,7 @@ const auth = getAuth(app);
 const database = getDatabase(app);
 const analytics = getAnalytics(app);
 
-// Función para iniciar sesión con Google
+// Función para iniciar sesión con Googleyyy
 const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
     try {

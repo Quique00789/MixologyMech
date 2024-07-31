@@ -57,6 +57,7 @@ const ProfitsChart = () => {
               label: 'Ganancias por bebidas',
               data: profitValues,
               backgroundColor: [
+                
                 'rgba(153, 102, 255, 0.2)', // Color para Gin Tonic
                 'rgba(255, 206, 86, 0.40', // Color para Margarita
                 'rgba(255, 159, 64, 0.2)',

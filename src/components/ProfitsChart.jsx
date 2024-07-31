@@ -54,27 +54,23 @@ const ProfitsChart = () => {
           data: {
             labels: labels,
             datasets: [{
-<<<<<<< Updated upstream
               label: 'Ganancias por bebidas',
-=======
-              label: 'Ganancias por Bebidas',
->>>>>>> Stashed changes
               data: profitValues,
               backgroundColor: [
-                'rgba(75, 192, 192, 0.2)', // Color para Daiquiri
                 'rgba(153, 102, 255, 0.2)', // Color para Gin Tonic
-                'rgba(255, 159, 64, 0.2)', // Color para Black Russian
+                'rgba(255, 206, 86, 0.40', // Color para Margarita
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(75, 192, 192, 0.2)', // Color para Daiquiri
+                'rgba(226, 50, 50, 0.2)',
                 'rgba(54, 162, 235, 0.2)', // Color para Cuba Libre
-                'rgba(255, 206, 86, 0.2)', // Color para Margarita
-                'rgba(255, 99, 132, 0.2)'  // Color para Ice Tea
               ],
               borderColor: [
-                'rgba(75, 192, 192, 1)',
                 'rgba(153, 102, 255, 1)',
+                'rgba(255, 236, 0, 1)',
                 'rgba(255, 159, 64, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(255, 50, 50, 1)',
                 'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(255, 99, 132, 1)'
               ],
               borderWidth: 1
             }]
@@ -87,7 +83,7 @@ const ProfitsChart = () => {
                 beginAtZero: true,
                 title: {
                   display: true,
-                  text: 'Total Profit'
+                 // text: 'Total Profit'
                 },
                 ticks: {
                   callback: function(value) {
@@ -98,7 +94,7 @@ const ProfitsChart = () => {
               x: {
                 title: {
                   display: true,
-                  text: 'Drink Names'
+                  //text: 'Drink Names'
                 }
               }
             }

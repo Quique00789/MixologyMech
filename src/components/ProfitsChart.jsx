@@ -1,3 +1,4 @@
+//ProfitsChart.jsx
 import React, { useEffect, useRef } from 'react';
 import { Chart, registerables } from 'chart.js';
 import { ref, get, child } from 'firebase/database';
@@ -57,13 +58,13 @@ const ProfitsChart = () => {
               label: 'Ganancias por bebidas',
               data: profitValues,
               backgroundColor: [
-                
+
                 'rgba(153, 102, 255, 0.2)', // Color para Gin Tonic
                 'rgba(255, 206, 86, 0.40', // Color para Margarita
-                'rgba(255, 159, 64, 0.2)',
+                'rgba(255, 159, 64, 0.2)', // Color para Black Russian
                 'rgba(75, 192, 192, 0.2)', // Color para Daiquiri
-                'rgba(226, 50, 50, 0.2)',
-                'rgba(54, 162, 235, 0.2)', // Color para Cuba Libre
+                'rgba(226, 50, 50, 0.2)', // Color para Cuba Libre
+                'rgba(54, 162, 235, 0.2)', // Color para Ice Tea
               ],
               borderColor: [
                 'rgba(153, 102, 255, 1)',

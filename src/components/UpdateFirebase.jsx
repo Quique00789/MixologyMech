@@ -1,3 +1,5 @@
+//Componente usado para hacer pruebas sin uso actualmente...
+
 import React, { useState } from 'react';
 import { ref, update } from 'firebase/database';
 import { database } from '../firebaseConfig';

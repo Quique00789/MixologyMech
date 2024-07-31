@@ -1,3 +1,4 @@
+//DrinkTop.jsx
 import React, { useEffect, useRef } from 'react';
 import { Chart, registerables } from 'chart.js';
 import { ref, get, child } from 'firebase/database';
@@ -39,7 +40,7 @@ const DrinkTop = () => {
             case 'Margarita':
               return 'rgba(255, 206, 86, 0.88)';  // Color para Margarita
               case 'Ice Tea':
-                return 'rgba(54, 162, 235, 0.60)';
+                return 'rgba(54, 162, 235, 0.60)'; // Color para Ice Tea
             default:
               return 'rgba(255, 255, 255, 0.75)'; // Color por defecto para cualquier otra bebida
           }

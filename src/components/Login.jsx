@@ -1,4 +1,4 @@
-// src/components/Login.jsx
+// Login.jsx
 import React from 'react';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 

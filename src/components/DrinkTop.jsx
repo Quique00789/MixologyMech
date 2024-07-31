@@ -29,6 +29,7 @@ const DrinkTop = () => {
         const pointColors = bebidaList.map(item => {
           switch (item.nombre) {
             case 'Daiquiri':
+<<<<<<< Updated upstream
               return 'rgba(75, 192, 192, 0.2)';  // Color para Daiquiri
             case 'Gin Tonic':
               return 'rgba(153, 102, 255, 0.2)'; // Color para Gin Tonic
@@ -38,8 +39,21 @@ const DrinkTop = () => {
               return 'rgba(54, 162, 235, 0.2)';  // Color para Cuba Libre
             case 'Margarita':
               return 'rgba(255, 206, 86, 0.50)';  // Color para Margarita
+=======
+              return 'rgba(75, 192, 192, 1)';  // Color para Daiquiri
+            case 'Gin Tonic':
+              return 'rgba(153, 102, 255, 1)'; // Color para Gin Tonic
+            case 'Black Russian':
+              return 'rgba(255, 159, 64, 1)';  // Color para Black Russian
+            case 'Cuba Libre':
+              return 'rgba(54, 162, 235, 1)';  // Color para Cuba Libre
+            case 'Margarita':
+              return 'rgba(255, 206, 86, 1)';  // Color para Margarita
+            case 'Ice Tea':
+              return 'rgba(255, 99, 132, 1)';  // Color para Ice Tea
+>>>>>>> Stashed changes
             default:
-              return 'rgba(54, 162, 235, 0.50)'; // Color por defecto para cualquier otra bebida
+              return 'rgba(54, 162, 235, 1)'; // Color por defecto para cualquier otra bebida
           }
         });
 

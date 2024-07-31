@@ -11,6 +11,7 @@ const BarChart = () => {
   useEffect(() => {
     const fetchData = async () => {
       const dbRef = ref(database);
+<<<<<<< Updated upstream
       const snapshot = await get(child(dbRef, 'bebidas')); // Cambiado a 'bebidas'
 
       if (snapshot.exists()) {
@@ -24,11 +25,32 @@ const BarChart = () => {
             groupedData[item.nombre] += parseInt(item.cantidad, 10);
           } else {
             groupedData[item.nombre] = parseInt(item.cantidad, 10);
+=======
+      const snapshot = await get(child(dbRef, 'bebidas'));
+
+      if (snapshot.exists()) {
+        // Obtener los datos de las bebidas
+        const rawData = snapshot.val() || {};
+
+        // Agrupar y sumar la cantidad por nombre de bebida
+        const data = Object.values(rawData).reduce((acc, item) => {
+          const quantity = parseFloat(item.cantidad) || 0;
+
+          if (acc[item.nombre]) {
+            acc[item.nombre] += quantity;
+          } else {
+            acc[item.nombre] = quantity;
+>>>>>>> Stashed changes
           }
         });
 
+<<<<<<< Updated upstream
         const labels = Object.keys(groupedData); // Nombres de las bebidas
         const consumptionData = Object.values(groupedData); // Consumos totales de las bebidas
+=======
+        const labels = Object.keys(data); // Nombres de las bebidas
+        const quantityData = Object.values(data); // Cantidades totales de las bebidas
+>>>>>>> Stashed changes
 
         if (chartRef.current) {
           chartRef.current.destroy();
@@ -40,8 +62,13 @@ const BarChart = () => {
           data: {
             labels: labels,
             datasets: [{
+<<<<<<< Updated upstream
               label: 'Consumo por Bebida',
               data: consumptionData,
+=======
+              label: 'Total Quantity per Drink',
+              data: quantityData,
+>>>>>>> Stashed changes
               backgroundColor: [
                 'rgba(75, 192, 192, 0.2)',
                 'rgba(153, 102, 255, 0.2)',

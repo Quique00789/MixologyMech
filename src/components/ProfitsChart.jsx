@@ -54,7 +54,11 @@ const ProfitsChart = () => {
           data: {
             labels: labels,
             datasets: [{
+<<<<<<< Updated upstream
               label: 'Ganancias por bebidas',
+=======
+              label: 'Ganancias por Bebidas',
+>>>>>>> Stashed changes
               data: profitValues,
               backgroundColor: [
                 'rgba(75, 192, 192, 0.2)', // Color para Daiquiri

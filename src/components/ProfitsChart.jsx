@@ -11,25 +11,32 @@ const ProfitsChart = () => {
   useEffect(() => {
     const fetchData = async () => {
       const dbRef = ref(database);
-      const snapshot = await get(child(dbRef, 'machineData/documentId'));
+      const snapshot = await get(child(dbRef, 'bebidas')); // Ajusta la ruta según sea necesario
 
       if (snapshot.exists()) {
         // Obtener los datos de consumo de bebidas
-        const rawData = snapshot.val().drinkConsumption || [];
+        const rawData = snapshot.val() || [];
 
-        // Precios de las bebidas
+        // Precios de las bebidas actualizados
         const prices = {
-          drink1: 49, // Precio para drink1
-          drink2: 79, // Precio para drink2
-          drink3: 149 // Precio para drink3
+          'Daiquiri': 23,
+          'Gin Tonic': 55,
+          'Black Russian': 76,
+          'Cuba Libre': 32, // Ajusta el precio si es necesario
+          'Margarita': 75, // Ajusta el precio si es necesario
+          'Ice Tea': 12 // Ajusta el precio si es necesario
         };
 
         // Calcular las ganancias por nombre de bebida
-        const profitsData = rawData.reduce((acc, item) => {
-          if (acc[item.name]) {
-            acc[item.name] += item.consumption * prices[item.name];
+        const profitsData = Object.values(rawData).reduce((acc, item) => {
+          const quantity = parseFloat(item.cantidad) || 0;
+          const price = prices[item.nombre] || 0;
+          const totalProfit = quantity * price;
+
+          if (acc[item.nombre]) {
+            acc[item.nombre] += totalProfit;
           } else {
-            acc[item.name] = item.consumption * prices[item.name];
+            acc[item.nombre] = totalProfit;
           }
           return acc;
         }, {});
@@ -47,17 +54,23 @@ const ProfitsChart = () => {
           data: {
             labels: labels,
             datasets: [{
-              label: 'Profits per Drink',
+              label: 'Ganancias por bebidas',
               data: profitValues,
               backgroundColor: [
-                'rgba(75, 192, 192, 0.2)', // Color para drink1
-                'rgba(153, 102, 255, 0.2)', // Color para drink2
-                'rgba(255, 159, 64, 0.2)'   // Color para drink3
+                'rgba(75, 192, 192, 0.2)', // Color para Daiquiri
+                'rgba(153, 102, 255, 0.2)', // Color para Gin Tonic
+                'rgba(255, 159, 64, 0.2)', // Color para Black Russian
+                'rgba(54, 162, 235, 0.2)', // Color para Cuba Libre
+                'rgba(255, 206, 86, 0.2)', // Color para Margarita
+                'rgba(255, 99, 132, 0.2)'  // Color para Ice Tea
               ],
               borderColor: [
                 'rgba(75, 192, 192, 1)',
                 'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
+                'rgba(255, 159, 64, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(255, 99, 132, 1)'
               ],
               borderWidth: 1
             }]
@@ -70,7 +83,18 @@ const ProfitsChart = () => {
                 beginAtZero: true,
                 title: {
                   display: true,
-                 
+                  text: 'Total Profit'
+                },
+                ticks: {
+                  callback: function(value) {
+                    return `$${value}`;
+                  }
+                }
+              },
+              x: {
+                title: {
+                  display: true,
+                  text: 'Drink Names'
                 }
               }
             }

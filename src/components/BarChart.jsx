@@ -11,24 +11,24 @@ const BarChart = () => {
   useEffect(() => {
     const fetchData = async () => {
       const dbRef = ref(database);
-      const snapshot = await get(child(dbRef, 'machineData/documentId'));
+      const snapshot = await get(child(dbRef, 'bebidas')); // Cambiado a 'bebidas'
 
       if (snapshot.exists()) {
-        // Obtener los datos de consumo de bebidas
-        const rawData = snapshot.val().drinkConsumption || [];
+        const rawData = snapshot.val();
+        const groupedData = {};
 
         // Agrupar y sumar el consumo por nombre de bebida
-        const data = rawData.reduce((acc, item) => {
-          if (acc[item.name]) {
-            acc[item.name] += item.consumption;
+        Object.keys(rawData).forEach((key) => {
+          const item = rawData[key];
+          if (groupedData[item.nombre]) {
+            groupedData[item.nombre] += parseInt(item.cantidad, 10);
           } else {
-            acc[item.name] = item.consumption;
+            groupedData[item.nombre] = parseInt(item.cantidad, 10);
           }
-          return acc;
-        }, {});
+        });
 
-        const labels = Object.keys(data); // Nombres de las bebidas
-        const consumptionData = Object.values(data); // Consumos totales de las bebidas
+        const labels = Object.keys(groupedData); // Nombres de las bebidas
+        const consumptionData = Object.values(groupedData); // Consumos totales de las bebidas
 
         if (chartRef.current) {
           chartRef.current.destroy();
@@ -40,7 +40,7 @@ const BarChart = () => {
           data: {
             labels: labels,
             datasets: [{
-              label: 'Expenditure per Drink',
+              label: 'Consumo por Bebida',
               data: consumptionData,
               backgroundColor: [
                 'rgba(75, 192, 192, 0.2)',

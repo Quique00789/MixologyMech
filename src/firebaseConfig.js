@@ -5,15 +5,15 @@ import { getAnalytics } from 'firebase/analytics';
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyB0Xl3511ZNyGQqzc-5DvChqFVtAkeUIS8",
-  authDomain: "realtimemixology.firebaseapp.com",
-  databaseURL: "https://realtimemixology-default-rtdb.firebaseio.com",
-  projectId: "realtimemixology",
-  storageBucket: "realtimemixology.appspot.com",
-  messagingSenderId: "188470696917",
-  appId: "1:188470696917:web:98e48d60c02ae9cc05bb5c",
-  measurementId: "G-EF72R7FPW5"
-};
+    apiKey: "AIzaSyCpt2kOMCywKnoH_YMoxLx-0E2tOHaVRJg",
+    authDomain: "mixology2-4bc8c.firebaseapp.com",
+    databaseURL: "https://mixology2-4bc8c-default-rtdb.firebaseio.com",
+    projectId: "mixology2-4bc8c",
+    storageBucket: "mixology2-4bc8c.appspot.com",
+    messagingSenderId: "394051080426",
+    appId: "1:394051080426:web:244dc0e9788198ecee8793",
+    measurementId: "G-7V13WE84T0"
+  };
 
 
 

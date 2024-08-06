@@ -4,26 +4,61 @@
   object-fit: contain; /* Ajusta la imagen sin distorsionarla */
   display: block;
   margin: 0 auto;
+  transition: transform 0.3s ease-in-out;
+}
+
+.drink-logo:hover {
+  transform: scale(1.1); /* Aumenta el tamaño de la imagen al pasar el ratón */
 }
 
 /* Estilo para la página del carrusel */
 .carousel-page {
   display: flex;
   justify-content: center;
+  opacity: 0;
+  animation: fadeIn 0.5s forwards;
+}
+
+.carousel-page.active {
+  opacity: 1;
+  animation: none; /* Evita que se reinicie la animación cuando está activa */
 }
 
 /* Estilo para cada ítem de bebida */
 .drink-item {
   margin: 0 10px;
   text-align: center;
+  transform: translateY(20px);
+  opacity: 0;
+  animation: slideUp 0.6s ease-in-out forwards;
+  animation-delay: calc(var(--animation-order) * 0.1s);
 }
 
+.drink-item.active {
+  transform: translateY(0);
+  opacity: 1;
+  animation: none; /* Evita que se reinicie la animación cuando está activa */
+}
 
 /* Estilo para el título de la bebida */
 .drink-title {
   font-size: 1.5em;
   margin-top: 10px;
   color: #ff6347;  /* Cambia este valor por el color que desees */
+  transition: color 0.3s ease-in-out;
+}
+
+.drink-title:hover {
+  color: #ff4500; /* Cambia el color al pasar el ratón */
+}
+
+/* Estilo para el índice de la bebida */
+.drink-index {
+  font-size: 1em;
+  margin-top: 5px;
+  background: linear-gradient(45deg, rgba(255,255,255,0.8), rgba(255,255,255,0.2)); /* Color degradado */
+  -webkit-text-fill-color: transparent;
+  transition: color 0.3s ease-in-out;
 }
 
 /* Estilo para los detalles de la bebida (consumo y mesa) */
@@ -31,8 +66,26 @@
   font-size: 1em;
   margin-top: 5px;
   color: #ffffff;  /* Cambia este valor por el color que desees */
+  transition: color 0.3s ease-in-out;
+}
+
+.drink-detail:hover {
+  color: #d3d3d3; /* Cambia el color al pasar el ratón */
 }
 
 body {
   overflow-x: hidden; /* Deshabilita el desplazamiento horizontal */
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }

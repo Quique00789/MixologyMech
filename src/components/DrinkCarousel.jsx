@@ -65,22 +65,33 @@ const DrinkCarousel = () => {
             showStatus={false}
             autoPlay={false}
             swipeable={true}
+            onChange={(index) => {
+                document.querySelectorAll('.carousel-page').forEach((el, i) => {
+                    if (i === index) {
+                        el.classList.add('active');
+                        el.querySelectorAll('.drink-item').forEach((item) => {
+                            item.classList.add('active');
+                        });
+                    } else {
+                        el.classList.remove('active');
+                        el.querySelectorAll('.drink-item').forEach((item) => {
+                            item.classList.remove('active');
+                        });
+                    }
+                });
+            }}
         >
             {groupedDrinks.map((group, pageIndex) => (
                 <div key={pageIndex} className="carousel-page">
                     {group.map((drink, i) => {
                         const globalIndex = pageIndex * 5 + i + 1;
                         return (
-                            <div key={i} className="drink-item">
+                            <div key={i} className="drink-item" style={{ '--animation-order': i }}>
                                 <img src={getDrinkLogo(drink.nombre)} alt={drink.nombre} className="drink-logo" />
-                                <h2
-                                    className="drink-title"
-                                    style={{ color: getDrinkTitleColor(drink.nombre) }}
-                                >
+                                <h2 className="drink-title" style={{ color: getDrinkTitleColor(drink.nombre) }}>
                                     {`Bebida ${globalIndex}: ${drink.nombre}`}
                                 </h2>
-                                <p className="drink-detail">{`Consumo: ${drink.cantidad}`}</p>
-                                <p className="drink-detail">{`Mesa: ${drink.mesa}`}</p>
+                                <p className="drink-detail">{`Mesa: ${drink.mesa || 'Mesa sin asignar'}`}</p>
                             </div>
                         );
                     })}

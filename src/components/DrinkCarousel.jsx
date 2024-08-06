@@ -30,6 +30,26 @@ const DrinkCarousel = () => {
         return require(`../drinkLogos/${normalizedDrinkName}.png`);
     };
 
+    // Función para obtener el color según el nombre de la bebida
+    const getDrinkTitleColor = (nombre) => {
+        switch (nombre) {
+            case 'Daiquiri':
+                return 'rgba(75, 192, 192, 1)';
+            case 'Gin Tonic':
+                return 'rgba(153, 102, 255, 1)';
+            case 'Black Russian':
+                return 'rgba(255, 159, 64, 1)';
+            case 'Cuba Libre':
+                return 'rgba(226, 50, 50, 1)';
+            case 'Margarita':
+                return 'rgba(255, 206, 86, 1)';
+            case 'Ice Tea':
+                return 'rgba(54, 162, 235, 1)';
+            default:
+                return 'rgba(255, 255, 255, 1)'; // Color por defecto
+        }
+    };
+
     const groupedDrinks = [];
     for (let i = 0; i < drinks.length; i += 5) {
         groupedDrinks.push(drinks.slice(i, i + 5));
@@ -47,15 +67,20 @@ const DrinkCarousel = () => {
             swipeable={true}
         >
             {groupedDrinks.map((group, pageIndex) => (
-                <div key={pageIndex} style={{ display: 'flex', justifyContent: 'center' }}>
+                <div key={pageIndex} className="carousel-page">
                     {group.map((drink, i) => {
                         const globalIndex = pageIndex * 5 + i + 1;
                         return (
-                            <div key={i} style={{ margin: '0 10px', textAlign: 'center' }}>
+                            <div key={i} className="drink-item">
                                 <img src={getDrinkLogo(drink.nombre)} alt={drink.nombre} className="drink-logo" />
-                                <h2>{`Bebida ${globalIndex}: ${drink.nombre}`}</h2>
-                                <p>{`Consumo: ${drink.cantidad}`}</p>
-                                <p>{`Mesa: ${drink.mesa}`}</p>
+                                <h2
+                                    className="drink-title"
+                                    style={{ color: getDrinkTitleColor(drink.nombre) }}
+                                >
+                                    {`Bebida ${globalIndex}: ${drink.nombre}`}
+                                </h2>
+                                <p className="drink-detail">{`Consumo: ${drink.cantidad}`}</p>
+                                <p className="drink-detail">{`Mesa: ${drink.mesa}`}</p>
                             </div>
                         );
                     })}

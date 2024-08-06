@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Chart, registerables } from 'chart.js';
 import { ref, onValue } from 'firebase/database';
 import { database } from '../firebaseConfig';
+import './ProfitsChart.css';
 
 Chart.register(...registerables);
 
@@ -43,17 +44,17 @@ const ProfitsChart = () => {
         const backgroundColors = labels.map((nombre) => {
           switch (nombre) {
             case 'Daiquiri':
-              return 'rgba(75, 192, 192, 0.60)';
+              return 'rgba(75, 192, 192, 0.4)';
             case 'Gin Tonic':
-              return 'rgba(153, 102, 255, 0.60)';
+              return 'rgba(153, 102, 255, 0.4)';
             case 'Black Russian':
-              return 'rgba(255, 159, 64, 0.60)';
+              return 'rgba(255, 159, 64, 0.4)';
             case 'Cuba Libre':
-              return 'rgba(226, 50, 50, 0.60)';
+              return 'rgba(226, 50, 50, 0.4)';
             case 'Margarita':
-              return 'rgba(255, 206, 86, 0.88)';
+              return 'rgba(255, 206, 86, 0.4)';
             case 'Ice Tea':
-              return 'rgba(54, 162, 235, 0.60)';
+              return 'rgba(54, 162, 235, 0.4)';
             default:
               return 'rgba(255, 255, 255, 0.75)';
           }

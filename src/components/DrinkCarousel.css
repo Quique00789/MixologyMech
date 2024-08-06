@@ -5,3 +5,34 @@
   display: block;
   margin: 0 auto;
 }
+
+/* Estilo para la página del carrusel */
+.carousel-page {
+  display: flex;
+  justify-content: center;
+}
+
+/* Estilo para cada ítem de bebida */
+.drink-item {
+  margin: 0 10px;
+  text-align: center;
+}
+
+
+/* Estilo para el título de la bebida */
+.drink-title {
+  font-size: 1.5em;
+  margin-top: 10px;
+  color: #ff6347;  /* Cambia este valor por el color que desees */
+}
+
+/* Estilo para los detalles de la bebida (consumo y mesa) */
+.drink-detail {
+  font-size: 1em;
+  margin-top: 5px;
+  color: #ffffff;  /* Cambia este valor por el color que desees */
+}
+
+body {
+  overflow-x: hidden; /* Deshabilita el desplazamiento horizontal */
+}

@@ -1,6 +1,6 @@
 //Header.jsx
 import React from 'react';
-import '../styles/Header.css'; // Asegúrate de crear este archivo CSS para los estilos
+import '../styles/Header.css'; 
 
 const Header = ({ isAuthenticated, onLogout, onLogin }) => {
   return (

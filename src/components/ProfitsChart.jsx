@@ -1,7 +1,6 @@
-//ProfitsChart.jsx
 import React, { useEffect, useRef } from 'react';
 import { Chart, registerables } from 'chart.js';
-import { ref, get, child } from 'firebase/database';
+import { ref, onValue } from 'firebase/database';
 import { database } from '../firebaseConfig';
 
 Chart.register(...registerables);
@@ -10,25 +9,21 @@ const ProfitsChart = () => {
   const chartRef = useRef(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const dbRef = ref(database);
-      const snapshot = await get(child(dbRef, 'bebidas')); // Ajusta la ruta según sea necesario
-
+    const dbRef = ref(database, 'bebidas');
+    
+    const unsubscribe = onValue(dbRef, (snapshot) => {
       if (snapshot.exists()) {
-        // Obtener los datos de consumo de bebidas
         const rawData = snapshot.val() || [];
 
-        // Precios de las bebidas actualizados
         const prices = {
           'Daiquiri': 23,
           'Gin Tonic': 55,
           'Black Russian': 76,
-          'Cuba Libre': 32, // Ajusta el precio si es necesario
-          'Margarita': 75, // Ajusta el precio si es necesario
-          'Ice Tea': 12 // Ajusta el precio si es necesario
+          'Cuba Libre': 32,
+          'Margarita': 75,
+          'Ice Tea': 12
         };
 
-        // Calcular las ganancias por nombre de bebida
         const profitsData = Object.values(rawData).reduce((acc, item) => {
           const quantity = parseFloat(item.cantidad) || 0;
           const price = prices[item.nombre] || 0;
@@ -42,8 +37,46 @@ const ProfitsChart = () => {
           return acc;
         }, {});
 
-        const labels = Object.keys(profitsData); // Nombres de las bebidas
-        const profitValues = Object.values(profitsData); // Ganancias totales por bebida
+        const labels = Object.keys(profitsData);
+        const profitValues = Object.values(profitsData);
+
+        const backgroundColors = labels.map((nombre) => {
+          switch (nombre) {
+            case 'Daiquiri':
+              return 'rgba(75, 192, 192, 0.60)';
+            case 'Gin Tonic':
+              return 'rgba(153, 102, 255, 0.60)';
+            case 'Black Russian':
+              return 'rgba(255, 159, 64, 0.60)';
+            case 'Cuba Libre':
+              return 'rgba(226, 50, 50, 0.60)';
+            case 'Margarita':
+              return 'rgba(255, 206, 86, 0.88)';
+            case 'Ice Tea':
+              return 'rgba(54, 162, 235, 0.60)';
+            default:
+              return 'rgba(255, 255, 255, 0.75)';
+          }
+        });
+
+        const borderColors = labels.map((nombre) => {
+          switch (nombre) {
+            case 'Daiquiri':
+              return 'rgba(75, 192, 192, 1)';
+            case 'Gin Tonic':
+              return 'rgba(153, 102, 255, 1)';
+            case 'Black Russian':
+              return 'rgba(255, 159, 64, 1)';
+            case 'Cuba Libre':
+              return 'rgba(226, 50, 50, 1)';
+            case 'Margarita':
+              return 'rgba(255, 206, 86, 1)';
+            case 'Ice Tea':
+              return 'rgba(54, 162, 235, 1)';
+            default:
+              return 'rgba(255, 255, 255, 1)';
+          }
+        });
 
         if (chartRef.current) {
           chartRef.current.destroy();
@@ -51,61 +84,36 @@ const ProfitsChart = () => {
 
         const ctx = document.getElementById('profitsChart').getContext('2d');
         chartRef.current = new Chart(ctx, {
-          type: 'bar',
+          type: 'doughnut',
           data: {
             labels: labels,
             datasets: [{
               label: 'Ganancias por bebidas',
               data: profitValues,
-              backgroundColor: [
-
-                'rgba(153, 102, 255, 0.2)', // Color para Gin Tonic
-                'rgba(255, 206, 86, 0.40', // Color para Margarita
-                'rgba(255, 159, 64, 0.2)', // Color para Black Russian
-                'rgba(75, 192, 192, 0.2)', // Color para Daiquiri
-                'rgba(226, 50, 50, 0.2)', // Color para Cuba Libre
-                'rgba(54, 162, 235, 0.2)', // Color para Ice Tea
-              ],
-              borderColor: [
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 236, 0, 1)',
-                'rgba(255, 159, 64, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(255, 50, 50, 1)',
-                'rgba(54, 162, 235, 1)',
-              ],
+              backgroundColor: backgroundColors,
+              borderColor: borderColors,
               borderWidth: 1
             }]
           },
           options: {
             responsive: true,
             maintainAspectRatio: false,
-            scales: {
-              y: {
-                beginAtZero: true,
-                title: {
-                  display: true,
-                 // text: 'Total Profit'
-                },
-                ticks: {
-                  callback: function(value) {
-                    return `$${value}`;
-                  }
-                }
+            plugins: {
+              legend: {
+                display: true,
+                position: 'top'
               },
-              x: {
-                title: {
-                  display: true,
-                  //text: 'Drink Names'
-                }
+              title: {
+                display: true,
+                text: 'Ganancias por Bebida'
               }
             }
           }
         });
       }
-    };
+    });
 
-    fetchData();
+    return () => unsubscribe();
   }, []);
 
   return <canvas id="profitsChart"></canvas>;

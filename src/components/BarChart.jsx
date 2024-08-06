@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Chart, registerables } from 'chart.js';
-import { ref, get, child } from 'firebase/database';
+import { ref, onValue } from 'firebase/database';
 import { database } from '../firebaseConfig';
 
 Chart.register(...registerables);
@@ -9,15 +9,13 @@ const BarChart = () => {
   const chartRef = useRef(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const dbRef = ref(database);
-      const snapshot = await get(child(dbRef, 'bebidas')); // Cambiado a 'bebidas'
-
+    const dbRef = ref(database, 'bebidas');
+    
+    const unsubscribe = onValue(dbRef, (snapshot) => {
       if (snapshot.exists()) {
         const rawData = snapshot.val();
         const groupedData = {};
 
-        // Agrupar y sumar el consumo por nombre de bebida
         Object.keys(rawData).forEach((key) => {
           const item = rawData[key];
           if (groupedData[item.nombre]) {
@@ -27,8 +25,46 @@ const BarChart = () => {
           }
         });
 
-        const labels = Object.keys(groupedData); // Nombres de las bebidas
-        const consumptionData = Object.values(groupedData); // Consumos totales de las bebidas
+        const labels = Object.keys(groupedData);
+        const consumptionData = Object.values(groupedData);
+
+        const backgroundColors = labels.map((nombre) => {
+          switch (nombre) {
+            case 'Daiquiri':
+              return 'rgba(75, 192, 192, 0.60)';
+            case 'Gin Tonic':
+              return 'rgba(153, 102, 255, 0.60)';
+            case 'Black Russian':
+              return 'rgba(255, 159, 64, 0.60)';
+            case 'Cuba Libre':
+              return 'rgba(226, 50, 50, 0.60)';
+            case 'Margarita':
+              return 'rgba(255, 206, 86, 0.88)';
+            case 'Ice Tea':
+              return 'rgba(54, 162, 235, 0.60)';
+            default:
+              return 'rgba(255, 255, 255, 0.75)';
+          }
+        });
+
+        const borderColors = labels.map((nombre) => {
+          switch (nombre) {
+            case 'Daiquiri':
+              return 'rgba(75, 192, 192, 1)';
+            case 'Gin Tonic':
+              return 'rgba(153, 102, 255, 1)';
+            case 'Black Russian':
+              return 'rgba(255, 159, 64, 1)';
+            case 'Cuba Libre':
+              return 'rgba(226, 50, 50, 1)';
+            case 'Margarita':
+              return 'rgba(255, 206, 86, 1)';
+            case 'Ice Tea':
+              return 'rgba(54, 162, 235, 1)';
+            default:
+              return 'rgba(255, 255, 255, 1)';
+          }
+        });
 
         if (chartRef.current) {
           chartRef.current.destroy();
@@ -42,24 +78,8 @@ const BarChart = () => {
             datasets: [{
               label: 'Consumo por Bebida',
               data: consumptionData,
-              backgroundColor: [
-                'rgba(153, 102, 255, 0.2)', // Color para Gin Tonic
-                'rgba(255, 206, 86, 0.40', // Color para Margarita
-                'rgba(255, 159, 64, 0.2)', // Color para Black Russian
-                'rgba(75, 192, 192, 0.2)', // Color para Daiquiri
-                'rgba(226, 50, 50, 0.2)', // Color para Cuba Libre
-                'rgba(54, 162, 235, 0.2)',  // Color para Ice Tea
-
-              ],
-              borderColor: [
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 236, 0, 1)',
-                'rgba(255, 159, 64, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(255, 50, 50, 1)',
-                'rgba(54, 162, 235, 1)',
-
-              ],
+              backgroundColor: backgroundColors,
+              borderColor: borderColors,
               borderWidth: 1
             }]
           },
@@ -70,13 +90,22 @@ const BarChart = () => {
               y: {
                 beginAtZero: true
               }
+            },
+            plugins: {
+              legend: {
+                display: false
+              },
+              title: {
+                display: true,
+                text: 'Consumo por Bebida'
+              }
             }
           }
         });
       }
-    };
+    });
 
-    fetchData();
+    return () => unsubscribe();
   }, []);
 
   return <canvas id="barChart"></canvas>;

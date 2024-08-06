@@ -1,6 +1,7 @@
 // App.js
 import React, { useState } from 'react';
 import './App.css';
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import Header from './components/Header';
 import AuthPopup from './components/AuthPopup';
 import DrinkTop from './components/DrinkTop';

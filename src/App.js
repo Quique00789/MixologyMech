@@ -1,10 +1,9 @@
-// App.js
 import React, { useState } from 'react';
 import './App.css';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import Header from './components/Header';
 import AuthPopup from './components/AuthPopup';
-import DrinkTop from './components/DrinkTop';
+import DrinkCarousel from './components/DrinkCarousel'; // Nuevo componente de carrusel
 import BarChart from './components/BarChart';
 import LineChart from './components/ProfitsChart';
 
@@ -46,12 +45,8 @@ function App() {
       {isAuthenticated ? (
         <>
           <div className="middle">
-            <div 
-              className={`chart ${expandedChart === 'drinkTop' ? 'expanded' : ''}`} 
-              onClick={() => toggleExpandChart('drinkTop')}
-            >
-              <DrinkTop />
-            </div>
+            {/* Usar DrinkCarousel en lugar de DrinkTop y eliminar la funcionalidad de expansión para este componente */}
+            <DrinkCarousel />
           </div>
           <div className="bottom">
             <div 

@@ -1,0 +1,7 @@
+.drink-logo {
+  width: 100px;
+  height: 100px;
+  object-fit: contain; /* Ajusta la imagen sin distorsionarla */
+  display: block;
+  margin: 0 auto;
+}
